@@ -11,8 +11,12 @@ function obtenerNuevaFrase(frase,trozoPalabra){
 	let palabras = frase.split(" ");
 	for(let i = 0 ; i<palabras.length ; i++){
 		let palabra = palabras[i];
-		for(let j = 0 ; palabra.length ; j++ ){
-
+		for(let j = 0 ; j<palabra.length ; j++){
+			if(i!=0&&i!=palabras.length-1){
+				if(palabra.includes(trozoPalabra)){
+					resultado = resultado + palabra;
+				}				
+			}
 		}
 	}
 	return resultado;
