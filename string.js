@@ -7,19 +7,16 @@
 //Por ejemplo: obtenerNuevaFrase("Espero ir al cine a ver el joker","e") => "ver joker";
 //Por ejemplo: obtenerNuevaFrase("Todo depende de si el raton si acaba pronto con el queso","to") => "raton";
 function obtenerNuevaFrase(frase,trozoPalabra){
-	let resultado = "";
-	let palabras = frase.split(" ");
-	for(let i = 0 ; i<palabras.length ; i++){
-		let palabra = palabras[i];
-		for(let j = 0 ; j<palabra.length ; j++){
-			if(i!=0&&i!=palabras.length-1){
-				if(palabra.includes(trozoPalabra)){
-					resultado = resultado + palabra;
-				}				
-			}
-		}
-	}
-	return resultado;
+    let resultado = "";
+    let fraselowercase = frase.toLowerCase();
+    let palabras = fraselowercase.split(" ");
+    for(let i = 0 ; i<palabras.length ; i++){
+        let palabra = palabras[i];
+        if(palabra.includes(trozoPalabra)==true&&palabra.startsWith(trozoPalabra)==false&&palabra.endsWith(trozoPalabra)==false){
+            resultado += palabra + " ";             
+        }
+    }
+    return resultado.trim();
 }
 
 //Función que devuelve la suma de todas las posiciones
@@ -27,7 +24,14 @@ function obtenerNuevaFrase(frase,trozoPalabra){
 //Por ejemplo: sumaDePosiciones("Prueba de la rueda","ue") => 16
 //Por ejemplo: sumaDePosiciones("Aclaremos el ejercicio","acl") => 0
 function sumaDePosiciones(frase,trozoPalabra){
-
+    let resultado = 0;
+    let fraselowercase = frase.toLowerCase();
+    let i = 0;
+    while(i<fraselowercase.length&&fraselowercase.includes(trozoPalabra,i)==true){
+        resultado += fraselowercase.indexOf(trozoPalabra,i);
+         i += fraselowercase.indexOf(trozoPalabra,i)+trozoPalabra.length;     
+    }
+    return resultado;
 }
 
 //Función que valida el formato RGB de los colores
@@ -37,7 +41,18 @@ function sumaDePosiciones(frase,trozoPalabra){
 //     #123ABC o #123abc
 //     #BBB    o #333     
 function esValidoFormatoRGB(color){
-
+    let resultado = false;
+    if(color.startsWith("#")==true){
+        for(let i = 1; i<color.length; i++){
+            if((color.charCodeAt(i)>=48&&color.charCodeAt(i)<=57)||(color.charCodeAt(i)>=65&&color.charCodeAt(i)<=90)||(color.charCodeAt(i)>=97&&color.charCodeAt(i)<=122)){
+                resultado = true;
+            }else{
+                resultado = false;
+                break;
+            }
+        }       
+    }
+    return resultado;
 }
 
 //Función que valida una URL de una web .com y .es
@@ -50,5 +65,7 @@ function esValidoFormatoRGB(color){
 //Por ejemplo: http://www.prueba.es => No valido
 //Por ejemplo: https://www.prueba?hola=1&holita=2&holar=3 =>No valido
 function esValidaURL(color){
-
+    let resultado = false;
+    
+    return resultado;
 }
