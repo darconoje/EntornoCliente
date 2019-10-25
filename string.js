@@ -44,7 +44,7 @@ function esValidoFormatoRGB(color){
     let resultado = false;
     if(color.startsWith("#")==true){
         for(let i = 1; i<color.length; i++){
-            if((color.charCodeAt(i)>=48&&color.charCodeAt(i)<=57)||(color.charCodeAt(i)>=65&&color.charCodeAt(i)<=90)||(color.charCodeAt(i)>=97&&color.charCodeAt(i)<=122)){
+            if((color.charCodeAt(i)>=48&&color.charCodeAt(i)<=57)||(color.charCodeAt(i)>=65&&color.charCodeAt(i)<=70)||(color.charCodeAt(i)>=97&&color.charCodeAt(i)<=102)){
                 resultado = true;
             }else{
                 resultado = false;
