@@ -64,8 +64,21 @@ function esValidoFormatoRGB(color){
 //Por ejemplo: http://www.prueba.es?ejemplo=1 =>no valido
 //Por ejemplo: http://www.prueba.es => No valido
 //Por ejemplo: https://www.prueba?hola=1&holita=2&holar=3 =>No valido
-function esValidaURL(color){
+function esValidaURL(url){
     let resultado = false;
-    
+    if(url.indexOf("?")>=0){
+        let urlget = url.split("?");
+        if(urlget[0].indexOf(".")>=0){
+            let urlinicio = urlget[0].split(".");
+            if(urlget[1].indexOf("&")>=0){
+                let urlgetparam = urlget[1].split("&");
+                if(urlinicio.length==3&&urlget.length==2&&urlgetparam.length>=2){
+                    if((urlinicio[0].localeCompare("http://www")==0||urlinicio[0].localeCompare("https://www")==0)&&(urlinicio[2].localeCompare("com")==0||urlinicio[2].localeCompare("es")==0)){
+                        resultado = true; 
+                    }                       
+                }
+            }           
+        }        
+    }
     return resultado;
 }
