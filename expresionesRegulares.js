@@ -8,7 +8,7 @@
 //Por ejemplo: http://www.prueba.es => No valido
 //Por ejemplo: https://www.prueba?hola=1&holita=2&holar=3 =>No valido
 function esValidaURL(url){
-    let expresion = /^((http|https):\/\/)+(www\.)?([a-zA-Z0-9])+(\.com|\.es)+(\?)+(([a-zA-Z0-9])+(\=)+([a-zA-Z0-9])+([&])){1,}([a-zA-Z0-9])+(\=)+([a-zA-Z0-9])$/
+    let expresion = /^((http|https):\/\/)+(www\.)?([a-zA-Z0-9])+(\.com|\.es)+(\?)+(([a-zA-Z0-9])+(\=)+([a-zA-Z0-9])+([&])){1,}([a-zA-Z0-9])+(\=)+([a-zA-Z0-9])$/g
     return expresion.test(url);
 }
 
@@ -20,12 +20,14 @@ function esValidaURL(url){
 //Tiene que tener al menos una letra Mayúscula
 //Ayuda: Pueden usarse varias expresiones regulares para validar el password
 function esValidaPassword(password){
-	let expresion = /(.*[0-9]+.*){4,}/;
-	return expresion.test(urt);
+	let expresion = /((.*[0-9]+.*){4,})*((.*[a-zA-Z]+.*){4,})*((.*[A-Z]+.*){1,})*((.*[\!\?\-\$\_]+.*){1,})/g;
+	return expresion.test(password);
 }
 
 //Función que elimina todos los caracterés que no sean letras y
 //números de una texto
 function eliminaCaracteresRaros(texto){
+	let expresion = /()/g;
+	return expresion.test(texto);
 
 }
