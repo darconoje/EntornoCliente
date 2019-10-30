@@ -27,7 +27,5 @@ function esValidaPassword(password){
 //Función que elimina todos los caracterés que no sean letras y
 //números de una texto
 function eliminaCaracteresRaros(texto){
-	let expresion = /()/g;
-	return expresion.test(texto);
-
+	return texto.replace(/[^a-z0-9]/g, "");
 }
