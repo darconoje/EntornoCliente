@@ -20,7 +20,8 @@ function esValidaURL(url){
 //Tiene que tener al menos una letra Mayúscula
 //Ayuda: Pueden usarse varias expresiones regulares para validar el password
 function esValidaPassword(password){
-
+	let expresion = /(.*[0-9]+.*){4,}/;
+	return expresion.test(urt);
 }
 
 //Función que elimina todos los caracterés que no sean letras y
