@@ -60,37 +60,29 @@ setTimeout(function(){dameAnimales("Perro","caniche");},10000);
 // Raza del animal con el nombre más alto en orden ascdente
 // Vida es el número de la posición del primer animal con vida par 
 // 4 puntos
-	function ordenarPorNombreAscendente(a,b){
-   		return a.nombre.toLocaleLowerCase().localeCompare(b.nombre.toLocaleLowerCase());
-	}
+
 function incluirAnimal(){
 
-	function ordenarPorNumeroLetrasEspecieAscendente(a,b){
-		return a.especie.length - b.especie.length;
+	function ordenarPorNombreAscendente(a,b){
+   		return a.nombre.toLocaleLowerCase().localeCompare(b.nombre.toLocaleLowerCase());
 	}
 
 	function ordenarVidaAscendente(a,b){
 		return a.vida - b.vida;
 	}
 
-	function ordenarPorNombreAscendente(a,b){
-   		return a.nombre.toLocaleLowerCase().localeCompare(b.nombre.toLocaleLowerCase());
+	function ordenarPorNumeroLetrasEspecieAscendente(a,b){
+		return a.especie.length - b.especie.length;
 	}
-
-	function ordenarPorNumeroLetrasEspecieDescendente(a,b){
-		return a.especie.length + b.especie.length;
-	}
-
-	let listadoAnimales1 = [animal1, animal2, animal3, animal4, animal5, animal6, animal7, animal8, animal9, animal10];
-	let listadoAnimales2 = [animal1, animal2, animal3, animal4, animal5, animal6, animal7, animal8, animal9, animal10];
-	let listadoAnimales3 = [animal1, animal2, animal3, animal4, animal5, animal6, animal7, animal8, animal9, animal10];
-	let listadoAnimales4 = [animal1, animal2, animal3, animal4, animal5, animal6, animal7, animal8, animal9, animal10];
 
 	let nuevoanimal = {
-		nombre: listadoAnimales1.sort(ordenarVidaAscendente).pop().nombre,
-		especie: listadoAnimales2.sort(ordenarPorNumeroLetrasEspecieAscendente).shift().especie,
-		raza: listadoAnimales3.sort(ordenarPorNombreAscendente).pop().raza,
-		vida: listadoAnimales4.indexOf(listadoAnimales.filter( x => x.vida % 2 == 0)[0])
+
+		//vida lo pongo al principio antes de usar sort en listaAnimales
+		vida: listadoAnimales.indexOf(listadoAnimales.filter( x => x.vida % 2 == 0)[0]),
+		nombre: listadoAnimales.sort(ordenarVidaAscendente)[listadoAnimales.length-1].nombre,
+		especie: listadoAnimales.sort(ordenarPorNumeroLetrasEspecieAscendente)[0].especie,
+		raza: listadoAnimales.sort(ordenarPorNombreAscendente)[listadoAnimales.length-1].raza
+
 	};
 
 	listadoAnimales.push(nuevoanimal);
