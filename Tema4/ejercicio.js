@@ -33,6 +33,7 @@ function validarNombre(event){
     }else{
         inputNombre.classList.add("inputErroneo");
     }
+
     return esCorrecto;
 }
 
@@ -69,8 +70,9 @@ function validarApellidos(event){
     if(esCorrecto){
         inputApellidos.classList.add("inputCorrecto");
     }else{
-        inputApellidos.classList.add("inputIncorrecto");
+        inputApellidos.classList.add("inputErroneo");
     }
+
     return esCorrecto;
 }
 
@@ -81,29 +83,35 @@ function validarEdad(event){
     let listaErrores = document.getElementById("erroresEdad");
     listaErrores.innerHTML = "";
     inputEdad.classList.remove("inputErroneo");
-    inputEdad.classList.rmeove("inputCorrecto");
+    inputEdad.classList.remove("inputCorrecto");
 
-    if(!/^[0-9]+$/.test(valor)){
+    if(!/^[0-9]*$/.test(valor)){
         esCorrecto = false;
         let divError = document.createElement("div");
         divError.innerHTML = "SOLO DEBEN USARSE NUMEROS";
         listaErrores.appendChild(divError);
     }
 
-
-
-    if(valor<18){
+    if(valor.length < 1){
         esCorrecto = false;
         let divError = document.createElement("div");
-        divError.innerHTML = "DEBE SER MAYOR DE 18";
+        divError.innerHTML = "NO PUEDE ESTAR VACIO";
+        listaErrores.appendChild(divError);
+    }
+
+    if(parseInt(valor)<18){
+        esCorrecto = false;
+        let divError = document.createElement("div");
+        divError.innerHTML = "DEBE SER MAYOR DE EDAD";
         listaErrores.appendChild(divError);
     }
 
     if(esCorrecto){
         inputEdad.classList.add("inputCorrecto");
     }else{
-        inputNombre.classList.add("inputErroneo");
+        inputEdad.classList.add("inputErroneo");
     }
+
     return esCorrecto;
 }
 
@@ -113,15 +121,23 @@ function validarProfesion(event){
 
 function validarTerminos(event){
     let esCorrecto = true;
-    let inputEdad = document.getElementById("terminos");
-    let valor = inputEdad.value.trim();
+    let inputTerminos = document.getElementById("terminos");
     let listaErrores = document.getElementById("erroresTerminos");
     listaErrores.innerHTML = "";
-    inputEdad.classList.remove("inputErroneo");
-    inputEdad.classList.rmeove("inputCorrecto"); 
+    inputTerminos.classList.remove("inputErroneo");
+    inputTerminos.classList.remove("inputCorrecto"); 
 
-    if(){
-        
+    if(!inputTerminos.checked){
+        esCorrecto = false;
+        let divError = document.createElement("div");
+        divError.innerHTML = "DEBE ACEPTAR LOS TERMINOS";
+        listaErrores.appendChild(divError);
+    }
+
+    if(esCorrecto){
+        inputTerminos.classList.add("inputCorrecto");
+    }else{
+        inputTerminos.classList.add("inputErroneo");
     }
 
     return esCorrecto;  
@@ -139,7 +155,9 @@ function validarFormulario(event){
         esFormularioCorrecto = true;
     }
     if(esFormularioCorrecto){
+
         let formulario = event.target;
+        formulario.submit();
 
         let usuario = {};
         let nombre = document.getElementById("nombre").value.trim();
@@ -151,6 +169,9 @@ function validarFormulario(event){
         usuario.edad = edad;
         usuario.profesion = profesion;
         listadoUsuarios.push(usuario);
+
+        alert("USUARIO CREADO");
+        formulario.reset();
     }else{
         alert("HAY ERRORES EN EL FORMULARIO");
     }

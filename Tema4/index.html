@@ -1,1 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head lang="es_ES">
+		    <meta charset="UTF-8">
+		    <title>EJERCICIO</title>
+		    <link rel="stylesheet" href="index.css">
+		    <script src="ejercicio.js" cache="false"></script>
+	</head>
 
+	<body>
+
+		<div>
+
+			<div class="formulario">
+				<h1>EJERCICIO</h1>
+				<form id="formularioCrearUsuario" action="" method="POST">
+
+					<div class="elemento">
+						<label for="nombre" class="etiqueta">Nombre:</label>
+						<input id="nombre"></input>
+						<div id="erroresNombre" class="error">
+
+						</div>
+					</div>
+
+					<div class="elemento">
+						<label for="apellidos" class="etiqueta">Apellidos:</label>
+						<input id="apellidos"></input>
+						<div id="erroresApellidos" class="error">
+
+						</div>
+					</div>
+
+					<div class="elemento">
+						<label for="edad" class="etiqueta">Edad:</label>
+						<input id="edad"></input>
+						<div id="erroresEdad" class="error">
+
+						</div>	
+					</div>
+
+					<div class="elemento">
+						<label for="profesion" class="etiqueta">Profesion:</label>
+						<select id="profesion">
+							<option>Ninguna</option>
+							<option>Profesor</option>
+							<option>Limpiador</option>
+							<option>Administrador</option>
+							<option>Recepcionista</option>
+						</select>
+					</div>
+
+					<div class="elemento">
+						<label for="terminos" class="etiqueta">Aceptar Termninos:</label>
+						<input type="checkbox" id="terminos" value="1" />
+						<div id="erroresTerminos" class="error">
+
+						</div>	
+					</div>
+
+					<div class="boton">
+						<input type="submit" value="Crear"></button>	
+					</div>
+
+				</form>
+
+
+
+			</div>
+			
+		</div>
+
+	</body>
+</html>

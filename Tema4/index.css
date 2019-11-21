@@ -1,5 +1,7 @@
+
+
 .formulario{
-    width:50%;
+    width:10%;
     margin:auto;
 }
 
@@ -16,4 +18,20 @@
     display: flex;
     justify-content: flex-start;
     margin-top:10px;
+}
+
+.error{
+	color:red;
+}
+
+.inputErroneo{
+    border:1px solid red;
+    color:white;
+    background-color: pink;
+}
+
+.inputCorrecto{
+    border:1px solid green;
+    color:white;
+    background-color: aquamarine;
 }
