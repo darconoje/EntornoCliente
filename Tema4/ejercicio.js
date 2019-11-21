@@ -157,7 +157,7 @@ function validarFormulario(event){
     if(esFormularioCorrecto){
 
         let formulario = event.target;
-        formulario.submit();
+        //formulario.submit();
 
         let usuario = {};
         let nombre = document.getElementById("nombre").value.trim();
@@ -168,10 +168,20 @@ function validarFormulario(event){
         usuario.apellidos = apellidos;
         usuario.edad = edad;
         usuario.profesion = profesion;
-        listadoUsuarios.push(usuario);
+        listadousuarios.push(usuario);
 
         alert("USUARIO CREADO");
         formulario.reset();
+
+        let divNombreUsuario = document.getElementById("nombreusuario");
+        divNombreUsuario.innerHTML = "Nombre: "+usuario.nombre;
+        let divApellidosUsuario = document.getElementById("apellidosusuario");
+        divApellidosUsuario.innerHTML = "Apellidos: "+usuario.apellidos;
+        let divEdadUsuario = document.getElementById("edadusuario");
+        divEdadUsuario.innerHTML = "Edad: "+usuario.edad;
+        let divProfesionUsuario = document.getElementById("profesionusuario");
+        divProfesionUsuario.innerHTML = "Profesion: "+usuario.profesion;
+
     }else{
         alert("HAY ERRORES EN EL FORMULARIO");
     }
