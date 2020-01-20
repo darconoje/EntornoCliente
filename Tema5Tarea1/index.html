@@ -1,0 +1,80 @@
+
+<html lang="es">
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+		<title>Tarea</title>
+		<link rel="stylesheet" href="css.css">
+		<script src="funciones.js" defer></script>
+		<script src="https://code.jquery.com/jquery-1.12.4.min.js" defer></script>
+	</head>
+
+	<body>
+		<div id="spinner">
+		</div>
+		<div>
+			<form id="formularioXML" action="">
+				<input type="submit" id="botonSubmitXML" value="Obtener XML">
+			</form>
+		</div>
+
+		<div>
+			<form id="formularioJSON" action="">
+				<input type="submit" id="botonSubmitJSON" value="Obtener JSON">
+			</form>
+		</div>
+		<div>
+		    <h1>FORMULARIO DE BUSQUEDA</h1>
+		    <form id="formularioBusqueda" action="">
+		    <div>
+		        <label for="nombre">Nombre</label>
+		        <input type="text" value="" name="nombre" id="nombre" />
+		    </div>    
+		    <div>
+		    	<label for="genero">Genero</label>
+		    	<select id="genero" name="genero">
+		    		<option value="ciencia ficcion">Ciencia Ficcion</option>
+		    		<option value="fantasia">Fantasia</option>
+		    		<option value="suspense">Suspense</option>
+		    		<option value="accion">Accion</option>
+		    		<option value="">No Importa</option>
+		    	</select>
+		    </div>
+		    <div>
+				<input type="checkbox" name="check" id="check" value="no">Mostrar sólo después del 2000<br>	   	
+		    </div>	
+		    <input type="submit" id="botonBusqueda" value="OBTENER DATOS POR BUSQUEDA" />
+		    </form>
+		</div>
+		<div>
+		    <h1>FORMULARIO DE AÑADIR</h1>
+		    <form id="formularioAñadir" action="">
+		    <div>
+		        <label for="nombre2">Nombre</label>
+		        <input type="text" value="" name="nombre2" id="nombre2" />
+		    </div>    
+		    <div>
+		    	<label for="genero2">Genero</label>
+		    	<select id="genero2" name="genero2">
+		    		<option value="ciencia ficcion">Ciencia Ficcion</option>
+		    		<option value="fantasia">Fantasia</option>
+		    		<option value="suspense">Suspense</option>
+		    		<option value="accion">Accion</option>
+		    		<option value="">No Importa</option>
+		    	</select>    	
+		    </div>
+		    <div>
+		        <label for="director">Director</label>
+		        <input type="text" value="" name="director" id="director" />
+		    </div> 
+		    <div>
+		        <label for="estreno">Estreno</label>
+		        <input type="text" value="" name="estreno" id="estreno" />
+		    </div> 		    		    
+		    <input type="submit" id="botonAñadir" value="AÑADIR A BBDD" />
+		    </form>
+		</div>		
+		<div id="resultado">
+
+		</div>		
+	</body>
+</html>
