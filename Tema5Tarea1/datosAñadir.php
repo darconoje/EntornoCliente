@@ -12,6 +12,6 @@ $conn->exec("set names utf8");
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $stmt = $conn->prepare("INSERT INTO peliculas (nombre,genero,director,estreno) VALUES ('".$_POST['nombre']."', '".$_POST['genero']."', '".$_POST['director']."', '".$_POST['estreno']."')");		
 $stmt->execute();
-//$peliculas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$peliculas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 echo json_encode($peliculas);
 ?>
