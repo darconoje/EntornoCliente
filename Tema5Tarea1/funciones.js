@@ -69,7 +69,7 @@ function realizarPeticionAsincronaJSON(){
     divResultado.innerHTML = "";
     document.getElementById("spinner").style ="display:block";
     miXHR = new objetoXHR();
-    miXHR.open("GET", "datosJSON.php", true);
+    miXHR.open("POST", "datosJSON.php", true);
     miXHR.onreadystatechange = comprobarEstadoPeticionJSON;
     miXHR.send(null);
 }
@@ -190,7 +190,7 @@ function peticionAñadir(){
     
     miXHR = new objetoXHR();
 
-    miXHR.open("GET", "datosAñadir.php", true);
+    miXHR.open("POST", "datosAñadir.php", true);
     let datos = "nombre="+nombre+"&genero="+genero+"&director="+director+"&estreno="+estreno;
     miXHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     miXHR.onreadystatechange = comprobarEstadoPeticionAñadir;
@@ -202,16 +202,11 @@ function comprobarEstadoPeticionAñadir(){
     switch(this.readyState){
         case 4:
             if (this.status == 200){
-                tratarAñadir(this.responseText);
+                document.getElementById("resultado").innerHTML="AÑADIDO CON ÉXITO"; 
             }else{
                 alert("HA HABIDO UN ERROR. INTENTELO MAS TARDE.")
             }
             document.getElementById("spinner").style ="display:none";
             break;    
     }
-}
-
-function tratarAñadir(respuesta){
-    var resultados= JSON.parse(respuesta);
-    document.getElementById("resultado").innerHTML="AÑADIDO CON ÉXITO";       
 }
