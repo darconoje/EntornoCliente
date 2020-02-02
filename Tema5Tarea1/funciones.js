@@ -2,13 +2,13 @@ document.addEventListener("DOMContentLoaded",function(){
     let formularioMYSQL = document.getElementById("formularioXML");
     formularioMYSQL.addEventListener("submit",function(event){
         event.preventDefault();
-        realizarPeticionSincronaXML();
+        peticionXML();
     });
 
     let formularioPDO = document.getElementById("formularioJSON");
     formularioPDO.addEventListener("submit",function(event){
         event.preventDefault();
-        realizarPeticionAsincronaJSON();
+        peticionJSON();
     });
 
     let formularioBuscar = document.getElementById("formularioBusqueda");
@@ -54,108 +54,12 @@ function objetoXHR(){
     throw new Error("No se pudo crear el objeto XMLHTTPRequest");
 }
 
-function realizarPeticionSincronaXML(){
-    let divResultado =  document.getElementById("resultado");
-    divResultado.innerHTML = "";
-    document.getElementById("spinner").style ="display:block";
-    miXHR = new objetoXHR();
-    miXHR.open("GET", "datosXML.php", false);
-    miXHR.onreadystatechange = comprobarEstadoPeticionXML;    
-    miXHR.send(null);
+function peticionXML(){
+    llamadaSincrona("datosXML.php","GET",null,"XML",crearTablaXML);
 }
 
-function realizarPeticionAsincronaJSON(){
-    let divResultado =  document.getElementById("resultado");
-    divResultado.innerHTML = "";
-    document.getElementById("spinner").style ="display:block";
-    miXHR = new objetoXHR();
-    miXHR.open("POST", "datosJSON.php", true);
-    miXHR.onreadystatechange = comprobarEstadoPeticionJSON;
-    miXHR.send(null);
-}
-
-function comprobarEstadoPeticionXML(){
-    switch(this.readyState){
-        case 4:
-            if (this.status == 200){
-               crearTablaXML(this.responseXML);
-            }else{
-                alert("HA HABIDO UN ERROR. INTENTELO MAS TARDE.")
-            }
-            document.getElementById("spinner").style ="display:none";
-            break;    
-    }
-}
-
-function comprobarEstadoPeticionJSON(){
-    switch(this.readyState){
-        case 4:
-            if (this.status == 200){
-                crearTablaJSON(this.responseText);
-            }else{
-                alert("HA HABIDO UN ERROR. INTENTELO MAS TARDE.")
-            }
-            document.getElementById("spinner").style ="display:none";
-            break;    
-    }
-}
-
-function crearTablaJSON(respuesta){
-    var resultados= JSON.parse(respuesta);
-    let salida="<table border='1'><tr><th>NOMBRE</th><th>GENERO</th><th>DIRECTOR</th><th>ESTRENO</th></tr>";
-    if(resultados.length===0){
-        document.getElementById("resultado").innerHTML="NO HAY NINGUN RESULTADO";
-    }else{
-         for (let i=0; i < resultados.length; i++){
-            let objeto = resultados[i];
-            salida+="<tr><td>"+objeto.nombre+"</td><td>"+
-            objeto.genero+"</td><td>"+objeto.director+"</td><td>"+
-            objeto.estreno +"</td></tr>";
-        }
-
-        salida+="</table>";
-
-        document.getElementById("resultado").innerHTML=salida;       
-    }
-
-
-}
-
-function crearTablaXML(respuesta){
-    let  datos=respuesta;
-
-
-    // Tenemos que recorrer el fichero XML empleando los métodos del DOM
-    let peliculas = datos.documentElement.getElementsByTagName("PELICULA");
-
-    // En la variable salida compondremos el código HTML de la tabla a imprimir.
-    let salida="<table border='1'><tr><th>NOMBRE</th><th>GENERO</th><th>DIRECTOR</th><th>ESTRENO</th></tr>";
-
-    // Hacemos un bucle para recorrer todos los elementos CD.
-    for (let i=0;i<peliculas.length;i++){
-        salida+="<tr>";
-
-        let nombre =peliculas[i].getElementsByTagName("NOMBRE");
-        salida+="<td>" + nombre[0].firstChild.nodeValue + "</td>";
-
-        let genero =peliculas[i].getElementsByTagName("GENERO");
-        salida+="<td>" + genero[0].firstChild.nodeValue + "</td>";
-
-        let director =peliculas[i].getElementsByTagName("DIRECTOR");
-        salida+="<td>" + director[0].firstChild.nodeValue + "</td>";
-
-        let duracion =peliculas[i].getElementsByTagName("ESTRENO");
-        salida+="<td>" + duracion[0].firstChild.nodeValue + "</td>";
-
-    // Cerramos la fila.
-        salida+="</tr>";
-    }
-
-    // Cuando ya no hay más peliculas cerramos la tabla.
-    salida+="</table>";
-
-    // Imprimimos la tabla dentro del contenedor resultados.
-    document.getElementById("resultado").innerHTML=salida;
+function peticionJSON(){
+    llamadaAsincrona("datosJSON.php","POST",null,"JSON",crearTablaJSON);
 }
 
 function peticionBusqueda(){
@@ -173,7 +77,7 @@ function peticionBusqueda(){
     miXHR.open("POST", "datosBusqueda.php", true);
     let datos = "nombre="+nombre+"&genero="+genero+"&check="+check;
     miXHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    miXHR.onreadystatechange = comprobarEstadoPeticionJSON;
+    miXHR.onreadystatechange = comprobarEstadoPeticionBusqueda;
     miXHR.send(datos);       
 }
 
@@ -198,6 +102,73 @@ function peticionAñadir(){
 
 }
 
+function llamadaSincrona(url,tipo,datos,tipoRespuesta,funcionCallback){
+    miXHR = new objetoXHR();
+    if (miXHR){
+        document.getElementById("spinner").style ="display:block";
+
+
+        miXHR.open(tipo, url, false);
+
+        miXHR.onreadystatechange = comprobarEstado(tipoRespuesta,funcionCallback);
+
+        if(tipo === "POST"){
+            // En las peticiones POST tenemos que enviar en la cabecera el Content-Type
+            //ya que los datos se envían formando parte de la cabecera.
+            miXHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        }
+
+        miXHR.send(datos);
+    }
+}
+
+function llamadaAsincrona(url,tipo,datos,tipoRespuesta,funcionCallback){
+    miXHR = new objetoXHR();
+    if (miXHR){
+        document.getElementById("spinner").style ="display:block";
+
+
+        miXHR.open(tipo, url, true);
+
+        miXHR.onreadystatechange = comprobarEstado(tipoRespuesta,funcionCallback);
+
+        if(tipo === "POST"){
+            // En las peticiones POST tenemos que enviar en la cabecera el Content-Type
+            //ya que los datos se envían formando parte de la cabecera.
+            miXHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        }
+
+        miXHR.send(datos);
+    }
+}
+
+function comprobarEstado(tipoRespuesta,funcion){
+    return function() {
+        switch(this.readyState){
+            case 4:
+                if (this.status == 200) {
+                    let respuesta = "";
+                    switch(tipoRespuesta){
+                        case "XML":
+                            respuesta = this.responseXML;
+                            crearTablaXML(respuesta);
+                            break;
+                        case "JSON" :
+                            respuesta = this.responseText;
+                            crearTablaJSON(respuesta);
+                            break;
+                    }
+                    document.getElementById("spinner").style ="display:none";
+                }else{
+                    alert("HA HABIDO UN ERROR. INTENTELO MAS TARDE."); 
+                    document.getElementById("spinner").style ="display:none";           
+                }            
+            break;
+        }
+
+    }
+}
+
 function comprobarEstadoPeticionAñadir(){
     switch(this.readyState){
         case 4:
@@ -209,4 +180,84 @@ function comprobarEstadoPeticionAñadir(){
             document.getElementById("spinner").style ="display:none";
             break;    
     }
+}
+
+function comprobarEstadoPeticionBusqueda(){
+    switch(this.readyState){
+        case 4:
+            if (this.status == 200){
+                crearTablaJSON(this.responseText);
+            }else{
+                alert("HA HABIDO UN ERROR. INTENTELO MAS TARDE.")
+            }
+            document.getElementById("spinner").style ="display:none";
+            break;    
+    }    
+}
+
+function crearTablaXML(respuesta){
+    let  datos=respuesta;
+
+
+    // Tenemos que recorrer el fichero XML empleando los métodos del DOM
+    let peliculas = datos.documentElement.getElementsByTagName("PELICULA");
+
+    if(peliculas.length==0){
+
+        document.getElementById("resultado").innerHTML="NO HAY NINGUN RESULTADO";
+
+    }else{
+
+        // En la variable salida compondremos el código HTML de la tabla a imprimir.
+        let salida="<table border='1'><tr><th>NOMBRE</th><th>GENERO</th><th>DIRECTOR</th><th>ESTRENO</th></tr>";
+
+        // Hacemos un bucle para recorrer todos los elementos CD.
+        for (let i=0;i<peliculas.length;i++){
+            salida+="<tr>";
+
+            let nombre =peliculas[i].getElementsByTagName("NOMBRE");
+            salida+="<td>" + nombre[0].firstChild.nodeValue + "</td>";
+
+            let genero =peliculas[i].getElementsByTagName("GENERO");
+            salida+="<td>" + genero[0].firstChild.nodeValue + "</td>";
+
+            let director =peliculas[i].getElementsByTagName("DIRECTOR");
+            salida+="<td>" + director[0].firstChild.nodeValue + "</td>";
+
+            let duracion =peliculas[i].getElementsByTagName("ESTRENO");
+            salida+="<td>" + duracion[0].firstChild.nodeValue + "</td>";
+
+        // Cerramos la fila.
+            salida+="</tr>";
+        }
+
+        // Cuando ya no hay más peliculas cerramos la tabla.
+        salida+="</table>";
+
+        // Imprimimos la tabla dentro del contenedor resultados.
+        document.getElementById("resultado").innerHTML=salida;
+    }
+
+
+}
+
+function crearTablaJSON(respuesta){
+    var resultados= JSON.parse(respuesta);
+    let salida="<table border='1'><tr><th>NOMBRE</th><th>GENERO</th><th>DIRECTOR</th><th>ESTRENO</th></tr>";
+    if(resultados.length===0){
+        document.getElementById("resultado").innerHTML="NO HAY NINGUN RESULTADO";
+    }else{
+         for (let i=0; i < resultados.length; i++){
+            let objeto = resultados[i];
+            salida+="<tr><td>"+objeto.nombre+"</td><td>"+
+            objeto.genero+"</td><td>"+objeto.director+"</td><td>"+
+            objeto.estreno +"</td></tr>";
+        }
+
+        salida+="</table>";
+
+        document.getElementById("resultado").innerHTML=salida;       
+    }
+
+
 }
