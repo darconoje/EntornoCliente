@@ -1,0 +1,87 @@
+<html lang="es">
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+		<title>Tarea</title>
+		<link rel="stylesheet" href="css.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
+		<script src="funciones.js" defer></script>
+	</head>
+
+	<body>
+		<div id="spinner">
+		</div>
+
+		<div>
+			<form id="formularioJSON" action="">
+				<input type="submit" id="botonSubmitJSON" value="Obtener JSON">
+			</form>
+		</div>
+		<div>
+		    <h1>FORMULARIO DE BUSQUEDA</h1>
+		    <form id="formularioBusqueda" action="">
+		    <div>
+		        <label for="nombre">Nombre:</label>
+		        <input type="text" value="" name="nombre" id="nombre" />
+		    </div>    
+		    <div>
+		    	<label for="so">Sistema Operativo:</label>
+		    	<select id="so" name="so">
+		    		<option value="BSD">BSD</option>
+		    		<option value="Linux">Linux</option>
+		    		<option value="Solaris">Solaris</option>
+		    		<option value="">No Importa</option>
+		    	</select>
+		    </div>
+		    <input type="submit" id="botonBusqueda" value="OBTENER DATOS POR BUSQUEDA" />
+		    </form>
+		</div>
+		<div>
+		    <h1>FORMULARIO DE AÑADIR</h1>
+		    <form id="formularioAñadir" action="">
+		    <div>
+		        <label for="nombre2">Nombre:</label>
+		        <input type="text" value="" name="nombre2" id="nombre2" />
+		        <div class="divErrores">
+                    
+                </div>		        
+		    </div>    
+
+		    <div>
+		    	<label for="so2">Sistema Operativo:</label>
+		    	<select id="so2" name="genero2">
+		    		<option value="BSD">BSD</option>
+		    		<option value="Linux">Linux</option>
+		    		<option value="Solaris">Solaris</option>
+		    	</select>    	
+		    </div>
+		    <div>
+		        <label for="origen">Origen:</label>
+		        <input type="text" value="" name="origen" id="origen" />
+		        <div class="divErrores">
+                    
+                </div>	
+		    </div> 
+	    
+		    <div>
+		        <label for="tamaño">Tamaño:</label>
+		        <input type="text" value="" name="tamaño" id="tamaño" />
+                <div class="divErrores">
+                    
+                </div>			        
+		    </div>
+
+		    <div>
+		    	<label for="estado">Estado:</label>
+		    	<select id="estado" name="estado">
+		    		<option value="Activo">Activo</option>
+		    		<option value="Durmiente">Durmiente</option>
+		    	</select>  
+		    </div> 		 		    		    
+		    <input type="submit" id="botonAñadir" value="AÑADIR A BBDD" />
+		    </form>
+		</div>		
+		<div id="resultado">
+
+		</div>		
+	</body>
+</html>
