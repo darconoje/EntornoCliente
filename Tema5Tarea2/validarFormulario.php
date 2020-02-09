@@ -9,7 +9,10 @@ function validar(){
           $errores["tamaño"]["numerico"] = "ERROR ESTO NO ES UN NUMERO";
        }
        if($tamaño < 0){
-          $errores["tamaño"]["min"] =  "COMO MINIMO DEBE SER MAYOR QUE 0";
+          $errores["tamaño"]["min"] =  "COMO MINIMO DEBE SER 0";
+       }
+       if($tamaño == null){
+          $errores["tamaño"]["vacio"] = "NO PUEDE ESTAR VACIO";
        }
     }
 

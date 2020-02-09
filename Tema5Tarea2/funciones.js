@@ -2,15 +2,15 @@ var procesos = [];
 
 $(function(){
     $("#nombre2").change(function(){
-        validarNombre($("#nombre2"));
+        validarDatos([$(this)],false);
     });
 
     $("#origen").change(function(){
-        validarNombre($("#origen"));
+        validarDatos([$(this)],false);
     });
 
     $("#tamaño").change(function(){
-        validarNumero($("#tamaño"));
+        validarDatos([$(this)],false);
     });
 
     $("#formularioJSON").submit(function(event){
@@ -25,139 +25,50 @@ $(function(){
 
     $("#formularioAñadir").submit(function(event){
         event.preventDefault();
-        validarFormularioBusqueda();
+        $("#botonAñadir").prop("disabled",true);
+        $("#formulario input").prop("readOnly",true);
+        validarDatos([$("#nombre2"),$("#origen"),$("#tamaño")],true);       
     });
 
 });
 
-function validarNumero(input){
-    let datosPost = {};
-    datosPost[input.attr("name")] = input.val();
-    realizarValidacion(datosPost,null);
-}
-
-function validarNombre(input){
-    let datosPost = {};
-    datosPost[input.attr("name")] = input.val();
-    realizarValidacion(datosPost,null);
-}
-
-function validarFormularioBusqueda(){
-    let datosPost = $("#formulario").serialize();
-    realizarValidacion(datosPost,function(){
-        datosAñadir();
-    });
-}
-
-function realizarValidacion(datosPost,funcionCallback){
-    
-    $.ajax({
-        url:"validarDatos.php",
-        method:'POST',
-        data:datosPost,
-        type:"JSON",
-        beforeSend:function(){
-            $("#spinner").show();
-            procesos.push(true);
-        }
-    })
-
-    .done(function(errores){
-        let todoCorrecto = true;
-      
-        for(inputName in errores){
-            let erroresInput = errores[inputName];
-            let divErrores = $(`#${inputName}`).next("div");
-            divErrores.html("");
-            if(!$.isEmptyObject(erroresInput)){
-                for(tipoError in erroresInput){
-                    divErrores.append(`<div>${erroresInput[tipoError]}</div>`);
-                }
-                todoCorrecto = false;
-            }
-        }
-
-        if(todoCorrecto && funcionCallback !== null){
-            funcionCallback();
-        }else{
-            document.getElementById("resultado").innerHTML="CORREGIR ERRORES";   
-        }
-    })
-
-    .fail(function(){
-        alert("HA HABIDO UN ERROR EN LA PETICIÓN");
-    })
-    .always(function(){
-        procesos.pop();
-        if(procesos.length === 0){
-          $("#spinner").hide();
-        }
-    });
-}
-
 function obtenerDatosJSON(){
     $("#spinner").css("display","block");
-    fetch("datosJSON.php", {
-        method: 'post'
+    $.ajax({
+        url:"datosJSON.php",
+        method:'POST',
+        type:"JSON"
     })
-    .then(function(response){ return response.json()})
-    .then(tratarResultadoJSON)
-    .catch(function(err) {
-        console.log(err);
-        alert("ERROR EN LA PETICION");
-         $("#resultado").html("SE HA PRODUCIDO UN ERROR EN LA PETICIÓN"); 
-    }).finally(function(){
-         $("#spinner").css("display","none");
-    });
+      .done(function(response){
+            tratarResultadoJSON(response);
+        })
+      .fail(function(){
+        alert("HA HABIDO UN ERROR EN LA PETICIÓN");
+        $("#resultado").html("SE HA PRODUCIDO UN ERROR EN LA PETICIÓN");
+      }).always(function(){
+         $("#spinner").css("display","none");        
+      });
 }
 
 function obtenerDatosBusqueda(){
-    let form = new FormData();
     $("#spinner").css("display","block");
-    form.append("nombre",$("#nombre").val());
-    form.append("so",$("#so").val());
-    fetch("datosBusqueda.php",{
-        method:"post",
-        body:form
+    let nombre = $("#nombre").val();
+    let so = $("#so").val();
+    $.ajax({
+        url:"datosBusqueda.php",
+        method:'POST',
+        data:{nombre:nombre,so:so},
+        type:"JSON"
     })
-    .then(function(response){
-            return response.json();
-    })
-    .then(tratarResultadoJSON)
-    .catch(function(err){
-        console.log(err);
-        alert("ERROR EN LA PETICION");
-            $("#resultado").html("SE HA PRODUCIDO UN ERROR EN LA PETICIÓN");    
-    }).finally(function(){
-        $("#spinner").css("display","none");
-    });
-}
-
-function datosAñadir(){
-    let form = new FormData();
-    form.append("nombre2",$("#nombre2").val());
-    form.append("so2",$("#so2").val());
-    form.append("origen",$("#origen").val());
-    form.append("tamaño",$("#tamaño").val());
-    form.append("estado",$("#estado").val());
-    fetch("datosAñadir.php",{
-        method:"post",
-        body:form
-    })
-    .then(function(response){
-            return response.json();
-    })
-    .then(function(){
-        $("#resultado").html("DISTRIBUCIÓN AÑADIDA CORRECTAMENTE");
-    })
-    .catch(function(error){
-        console.error(error);
-        alert("ERROR EN LA PETICION");
-            $("#resultado").html("SE HA PRODUCIDO UN ERROR EN LA PETICIÓN");    
-    }).finally(function(){
-    })
-    
-    ;
+      .done(function(response){
+            tratarResultadoJSON(response);
+        })
+      .fail(function(){
+        alert("HA HABIDO UN ERROR EN LA PETICIÓN");
+        $("#resultado").html("SE HA PRODUCIDO UN ERROR EN LA PETICIÓN");
+      }).always(function(){
+         $("#spinner").css("display","none");        
+      });    
 }
 
 function tratarResultadoJSON(respuesta){
@@ -178,3 +89,81 @@ function tratarResultadoJSON(respuesta){
         document.getElementById("resultado").innerHTML=salida;        
     }
 }
+
+function validarDatos(listaInputs,ejecutarFormulario){
+    var datosPOST = {};
+    listaInputs.forEach(
+        input => datosPOST[input.attr('name')] = input.val()
+    );
+    
+    $.ajax({
+        url:"validarDatos.php",
+        method:'POST',
+        data:datosPOST,
+        type:"JSON",
+        beforeSend:function(){
+            $("#spinner").show();
+            procesos.push(true);
+        }
+    })
+      .done(function(errores){
+            document.getElementById("resultado").innerHTML="";
+            let todoCorrecto = true;
+            for(inputName in errores){
+                let erroresInput = errores[inputName];
+                $(`#${inputName}`).removeClass("inputCorrecto");
+                $(`#${inputName}`).removeClass("inputErroneo");
+                let divErrores = $(`#${inputName}`).next("div");
+                divErrores.html("");
+                if(!$.isEmptyObject(erroresInput)){
+                    $(`#${inputName}`).addClass("inputErroneo");
+                    for(tipoError in erroresInput){
+                        divErrores.append(`<div>${erroresInput[tipoError]}</div>`);
+                    }
+                    todoCorrecto = false;
+                    document.getElementById("resultado").innerHTML="DEBE CORREGIR LOS ERRORES";
+
+                }else{
+                   $(`#${inputName}`).addClass("inputCorrecto"); 
+                }
+            }
+
+            if(todoCorrecto && ejecutarFormulario){
+                   datosAñadir();
+            }
+        })
+      .fail(function(){
+          alert("HA HABIDO UN ERROR EN LA PETICIÓN");
+      })
+      .always(function(){
+          procesos.pop();
+          if(procesos.length === 0){
+            $("#spinner").hide();
+          }
+          if(ejecutarFormulario){
+            $("#botonAñadir").prop("disabled",false);
+            $("#formularioAñadir input").prop("readOnly",false);
+          }
+      })
+}
+
+function datosAñadir(){
+    let nombre = $("#nombre2").val();
+    let so = $("#so2").val();
+    let origen = $("#origen").val();
+    let tamaño = $("#tamaño").val();
+    let estado = $("#estado").val();
+    $.ajax({
+        url:"datosAñadir.php",
+        method:'POST',
+        data:{nombre2:nombre,so2:so,origen:origen,tamaño:tamaño,estado:estado},
+        type:"JSON"
+    })
+      .done(function(errores){
+            $("#resultado").html("DISTRIBUCIÓN AÑADIDA CORRECTAMENTE");
+        })
+      .fail(function(){
+          alert("HA HABIDO UN ERROR EN LA PETICIÓN");
+      });
+}
+
